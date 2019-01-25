@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="算法,">
 
 
 
@@ -94,13 +94,27 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="jqmark">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="转载自https://www.jianshu.com/p/ae5157c26af9  目录 遗传算法定义  生物学术语 问题导入 大体实现 具体细节 代码实现  1. 什么是遗传算法1.1 遗传算法的科学定义遗传算法（Genetic Algorithm, GA）是模拟达尔文生物进化论的自然选择和遗传学机理的生物进化过程的计算模型，是一种通过模拟自然进化过程搜索最优解的方法。 其主要特点是直接对结">
+<meta name="keywords" content="算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【算法】超详细的遗传算法(Genetic Algorithm)解析">
+<meta property="og:url" content="http://yoursite.com/2019/01/25/secondlog/index.html">
 <meta property="og:site_name" content="jqmark">
+<meta property="og:description" content="转载自https://www.jianshu.com/p/ae5157c26af9  目录 遗传算法定义  生物学术语 问题导入 大体实现 具体细节 代码实现  1. 什么是遗传算法1.1 遗传算法的科学定义遗传算法（Genetic Algorithm, GA）是模拟达尔文生物进化论的自然选择和遗传学机理的生物进化过程的计算模型，是一种通过模拟自然进化过程搜索最优解的方法。 其主要特点是直接对结">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/10386940-f6a0d1d8226405fa.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/708/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/10386940-8f50b192fccef92e.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/10386940-517221056cd4af43.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/500/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/10386940-bdafc578b24fa1c6.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/289/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/10386940-1f0dda5c0fab787b.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/191/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/10386940-bf5ce56a414e10db.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/502/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/10386940-38df5ee1440b2fbc.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/264/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/10386940-dba7fdf2300f0e55.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/491/format/webp">
+<meta property="og:updated_time" content="2019-01-25T09:07:49.804Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="jqmark">
+<meta name="twitter:title" content="【算法】超详细的遗传算法(Genetic Algorithm)解析">
+<meta name="twitter:description" content="转载自https://www.jianshu.com/p/ae5157c26af9  目录 遗传算法定义  生物学术语 问题导入 大体实现 具体细节 代码实现  1. 什么是遗传算法1.1 遗传算法的科学定义遗传算法（Genetic Algorithm, GA）是模拟达尔文生物进化论的自然选择和遗传学机理的生物进化过程的计算模型，是一种通过模拟自然进化过程搜索最优解的方法。 其主要特点是直接对结">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/10386940-f6a0d1d8226405fa.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/708/format/webp">
 
 
 
@@ -129,13 +143,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/">
+  <link rel="canonical" href="http://yoursite.com/2019/01/25/secondlog/">
 
 
 
 
 
-  <title>jqmark</title>
+  <title>【算法】超详细的遗传算法(Genetic Algorithm)解析 | jqmark</title>
   
 
 
@@ -160,9 +174,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-   page-home 
- ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -245,9 +257,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -277,9 +289,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/01/25/secondlog/" itemprop="url">【算法】超详细的遗传算法(Genetic Algorithm)解析</a></h1>
+          <h1 class="post-title" itemprop="name headline">【算法】超详细的遗传算法(Genetic Algorithm)解析</h1>
         
 
         <div class="post-meta">
@@ -329,9 +339,7 @@
       
 
       
-        
-          
-            <blockquote>
+        <blockquote>
 <p>转载自<a href="https://www.jianshu.com/p/ae5157c26af9" title="【算法】超详细的遗传算法(Genetic Algorithm)解析" target="_blank" rel="noopener">https://www.jianshu.com/p/ae5157c26af9</a></p>
 </blockquote>
 <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
@@ -826,8 +834,6 @@ int createmask(int a)
     return mask;
 }
 </code></pre>
-          
-        
       
     </div>
     
@@ -842,135 +848,36 @@ int createmask(int a)
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/24/firstblog/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Mark Jiang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="jqmark">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/01/24/firstblog/" itemprop="url">我的第一个博客</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-24T18:31:50+08:00">
-                2019-01-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-
+            <a href="/tags/算法/" rel="tag"># 算法</a>
           
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>发布出这个博客，查资料加上尝试总共用了两天。之前一直想写个博客，因为我听说坚持写技术博客的最后很多都成了大牛。然而因为我的懒惰和拖延，我拖到了现在才弄出了这么一个超级简陋的博客。额(⊙﹏⊙)，希望我能坚持下去吧。</p>
-<h4 id="下面附上我做出这个博客都查阅了哪些网站"><a href="#下面附上我做出这个博客都查阅了哪些网站" class="headerlink" title="下面附上我做出这个博客都查阅了哪些网站"></a>下面附上我做出这个博客都查阅了哪些网站</h4><p><a href="https://www.cnblogs.com/cherishzy/p/5694658.html" target="_blank" rel="noopener">在Github上面搭建Hexo博客（一）：部署到Github</a><br><a href="https://www.jianshu.com/p/1c888a6b8297?utm_source=oschina-app" target="_blank" rel="noopener">hexo——轻量、简易、高逼格的博客</a><br><a href="https://hexo.io/docs/" target="_blank" rel="noopener">Hexo文档</a><br><a href="https://www.jianshu.com/p/191d1e21f7ed" target="_blank" rel="noopener">Markdown基本语法</a><br><a href="https://blog.csdn.net/time888/article/details/70249241" target="_blank" rel="noopener">hexo 怎么删除文章</a><br><a href="https://www.jianshu.com/p/3a05351a37dc" target="_blank" rel="noopener">Hexo的Next主题详细配置</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
       
 
       
       
-        <div class="post-eof"></div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/24/firstblog/" rel="next" title="我的第一个博客">
+                <i class="fa fa-chevron-left"></i> 我的第一个博客
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
       
     </footer>
   </div>
@@ -980,10 +887,11 @@ int createmask(int a)
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -991,6 +899,10 @@ int createmask(int a)
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -1011,8 +923,17 @@ int createmask(int a)
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Mark Jiang">
           <p class="site-author-name" itemprop="name">Mark Jiang</p>
@@ -1063,6 +984,22 @@ int createmask(int a)
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#目录"><span class="nav-number">1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-什么是遗传算法"><span class="nav-number">2.</span> <span class="nav-text">1. 什么是遗传算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-遗传算法的科学定义"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 遗传算法的科学定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-遗传算法的执行过程-参照百度百科"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 遗传算法的执行过程(参照百度百科)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-相关生物学术语"><span class="nav-number">3.</span> <span class="nav-text">2. 相关生物学术语</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-问题引出与解决问题"><span class="nav-number">4.</span> <span class="nav-text">3. 问题引出与解决问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-一元函数最大值问题"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 一元函数最大值问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-“袋鼠蹦跳”"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 “袋鼠蹦跳”</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-大体实现过程"><span class="nav-number">5.</span> <span class="nav-text">4. 大体实现过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-开始我们的进化（具体实现细节）"><span class="nav-number">6.</span> <span class="nav-text">5. 开始我们的进化（具体实现细节）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-先从编码说起"><span class="nav-number">6.1.</span> <span class="nav-text">5.1 先从编码说起</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-1-二进制编码法"><span class="nav-number">6.1.1.</span> <span class="nav-text">5.1.1 二进制编码法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-２-浮点编码法"><span class="nav-number">6.1.2.</span> <span class="nav-text">5.1.２ 浮点编码法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-3-符号编码法"><span class="nav-number">6.1.3.</span> <span class="nav-text">5.1.3 符号编码法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-为我们的袋鼠染色体编码"><span class="nav-number">6.2.</span> <span class="nav-text">5.2 为我们的袋鼠染色体编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-评价个体的适应度–适应度函数（fitness-function）"><span class="nav-number">6.3.</span> <span class="nav-text">5.3 评价个体的适应度–适应度函数（fitness function）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-4-射杀一些袋鼠–选择函数（selection）"><span class="nav-number">6.4.</span> <span class="nav-text">5.4 射杀一些袋鼠–选择函数（selection）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-５-遗传–染色体交叉-crossover"><span class="nav-number">6.5.</span> <span class="nav-text">5.５ 遗传–染色体交叉(crossover)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-6-变异–基因突变-Mutation"><span class="nav-number">6.6.</span> <span class="nav-text">5.6 变异–基因突变(Mutation)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-代码实现环节"><span class="nav-number">7.</span> <span class="nav-text">6. 代码实现环节</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -1183,10 +1120,10 @@ int createmask(int a)
 
 
   
-    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
 
-  
+
 
   
 
