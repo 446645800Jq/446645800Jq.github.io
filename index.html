@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next mist use-motion" lang="">
+<html class="theme-next gemini use-motion" lang="">
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -108,7 +108,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Mist',
+    scheme: 'Gemini',
     sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
     tabs: true,
@@ -330,506 +330,21 @@
 
       
         
-          
-            <blockquote>
+          <blockquote>
 <p>转载自<a href="https://www.jianshu.com/p/ae5157c26af9" title="【算法】超详细的遗传算法(Genetic Algorithm)解析" target="_blank" rel="noopener">https://www.jianshu.com/p/ae5157c26af9</a></p>
 </blockquote>
-<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
-<li>遗传算法定义 </li>
-<li>生物学术语</li>
-<li>问题导入</li>
-<li>大体实现</li>
-<li>具体细节</li>
-<li>代码实现</li>
-</ul>
-<h2 id="1-什么是遗传算法"><a href="#1-什么是遗传算法" class="headerlink" title="1. 什么是遗传算法"></a>1. 什么是遗传算法</h2><h3 id="1-1-遗传算法的科学定义"><a href="#1-1-遗传算法的科学定义" class="headerlink" title="1.1 遗传算法的科学定义"></a>1.1 遗传算法的科学定义</h3><p>遗传算法（Genetic Algorithm, GA）是模拟达尔文生物进化论的自然选择和遗传学机理的生物进化过程的计算模型，是一种通过模拟自然进化过程搜索最优解的方法。</p>
-<p>其主要特点是直接对结构对象进行操作，不存在求导和函数连续性的限定；具有内在的隐并行性和更好的全局寻优能力；采用概率化的寻优方法，不需要确定的规则就能自动获取和指导优化的搜索空间，自适应地调整搜索方向。</p>
-<p>遗传算法以一种群体中的所有个体为对象，并利用随机化技术指导对一个被编码的参数空间进行高效搜索。其中，选择、交叉和变异构成了遗传算法的遗传操作；参数编码、初始群体的设定、适应度函数的设计、遗传操作设计、控制参数设定五个要素组成了遗传算法的核心内容。</p>
-<h3 id="1-2-遗传算法的执行过程-参照百度百科"><a href="#1-2-遗传算法的执行过程-参照百度百科" class="headerlink" title="1.2 遗传算法的执行过程(参照百度百科)"></a>1.2 遗传算法的执行过程(参照百度百科)</h3><p><img src="https://upload-images.jianshu.io/upload_images/10386940-f6a0d1d8226405fa.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/708/format/webp" alt=""></p>
-<h2 id="2-相关生物学术语"><a href="#2-相关生物学术语" class="headerlink" title="2. 相关生物学术语"></a>2. 相关生物学术语</h2><p>为了大家更好了解遗传算法，在此之前先简单介绍一下相关生物学术语，大家了解一下即可。</p>
-<ul>
-<li>基因型(genotype)：性状染色体的内部表现；</li>
-<li>表现型(phenotype)：染色体决定的性状的外部表现，或者说，根据基因型形成的个体的外部表现；</li>
-<li>进化(evolution)：种群逐渐适应生存环境，品质不断得到改良。生物的进化是以种群的形式进行的。</li>
-<li>适应度(fitness)：度量某个物种对于生存环境的适应程度。</li>
-<li>选择(selection)：以一定的概率从种群中选择若干个个体。一般，选择过程是一种基于适应度的优胜劣汰的过程。</li>
-<li>复制(reproduction)：细胞分裂时，遗传物质DNA通过复制而转移到新产生的细胞中，新细胞就继承了旧细胞的基因。</li>
-<li>交叉(crossover)：两个染色体的某一相同位置处DNA被切断，前后两串分别交叉组合形成两个新的染色体。也称基因重组或杂交；</li>
-<li>变异(mutation)：复制时可能（很小的概率）产生某些复制差错，变异产生新的染色体，表现出新的性状。</li>
-<li>编码(coding)：DNA中遗传信息在一个长链上按一定的模式排列。遗传编码可看作从表现型到基因型的映射。</li>
-<li>解码(decoding)：基因型到表现型的映射。</li>
-<li>个体（individual）：指染色体带有特征的实体；</li>
-<li>种群（population）：个体的集合，该集合内个体数称为种群</li>
-</ul>
-<h2 id="3-问题引出与解决问题"><a href="#3-问题引出与解决问题" class="headerlink" title="3. 问题引出与解决问题"></a>3. 问题引出与解决问题</h2><h3 id="3-1-一元函数最大值问题"><a href="#3-1-一元函数最大值问题" class="headerlink" title="3.1 一元函数最大值问题"></a>3.1 一元函数最大值问题</h3><p>如下的函数图像：<br><img src="https://upload-images.jianshu.io/upload_images/10386940-8f50b192fccef92e.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000/format/webp" alt=""></p>
-<blockquote>
-<p>现在我们要在既定的区间内找出函数的最大值。</p>
-</blockquote>
-<p>学过高中数学的孩纸都知道，上面的函数存在着很多的极大值和极小值。而最大值则是指定区间的极大值中的最大的那一个。从图像上具体表现为，极大值像是一座座山峰，极小值则是像一座座山谷。因此，我们也可以把遗传算法的过程看作是一个在多元函数里面求最优解的过程。</p>
-<p>这些山峰对应着局部最优解，其中有一个山峰是海拔最高的，这个山峰则对应的是全局最优解。那么，遗传算法要做的就是尽量爬到最高峰，而不是困在较低的小山峰上。（如果问题求解是最小值，那么要做的就是尽量走到最低谷，道理是一样的）。<br><img src="https://upload-images.jianshu.io/upload_images/10386940-517221056cd4af43.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/500/format/webp" alt=""></p>
-<h3 id="3-2-“袋鼠蹦跳”"><a href="#3-2-“袋鼠蹦跳”" class="headerlink" title="3.2 “袋鼠蹦跳”"></a>3.2 “袋鼠蹦跳”</h3><p>既然我们把函数曲线理解成一个一个山峰和山谷组成的山脉。那么我们可以设想所得到的每一个解就是一只袋鼠，我们希望它们不断的向着更高处跳去，直到跳到最高的山峰。<strong>所以求最大值的过程就转化成一个“袋鼠跳”的过程。</strong></p>
-<p>下面介绍介绍“袋鼠跳”的几种方式。</p>
-<ul>
-<li>爬山算法：一只袋鼠朝着比现在高的地方跳去。它找到了不远处的最高的山峰。但是这座山不一定是最高峰。这就是爬山算法，它不能保证局部最优值就是全局最优值。</li>
-<li>模拟退火：袋鼠喝醉了。它随机地跳了很长时间。这期间，它可能走向高处，也可能踏入平地。但是，它渐渐清醒了并朝最高峰跳去。这就是模拟退火算法。遗传算法：有很多袋鼠，它们降落到喜玛拉雅山脉的任意地方。这些袋鼠并不知道它们的任务是寻找珠穆朗玛峰。但每过几年，就在一些海拔高度较低的地方射杀一些袋鼠。于是，不断有袋鼠死于海拔较低的地方，而越是在海拔高的袋鼠越是能活得更久，也越有机会生儿育女。就这样经过许多年，这些袋鼠们竟然都不自觉地聚拢到了一个个的山峰上，可是在所有的袋鼠中，只有聚拢到珠穆朗玛峰的袋鼠被带回了美丽的澳洲。</li>
-</ul>
-<h2 id="4-大体实现过程"><a href="#4-大体实现过程" class="headerlink" title="4. 大体实现过程"></a>4. 大体实现过程</h2><p>遗传算法中每一条染色体，对应着遗传算法的一个解决方案，一般我们用适应性函数（fitness function）来衡量这个解决方案的优劣。所以从一个基因组到其解的适应度形成一个映射。<strong>遗传算法的实现过程实际上就像自然界的进化过程那样。</strong></p>
-<p>下面我们用袋鼠跳中的步骤一一对应解释，以方便大家理解：</p>
-<ol>
-<li>首先寻找一种对问题潜在解进行“数字化”编码的方案。（建立表现型和基因型的映射关系）</li>
-<li>随机初始化一个种群（那么第一批袋鼠就被随意地分散在山脉上），种群里面的个体就是这些数字化的编码。</li>
-<li>接下来，通过适当的解码过程之后（得到袋鼠的位置坐标）。</li>
-<li>用适应性函数对每一个基因个体作一次适应度评估（袋鼠爬得越高当然就越好，所以适应度相应越高）。</li>
-<li>用选择函数按照某种规定择优选择（每隔一段时间，射杀一些所在海拔较低的袋鼠，以保证袋鼠总体数目持平。）。</li>
-<li>让个体基因变异（让袋鼠随机地跳一跳）。</li>
-<li>然后产生子代（希望存活下来的袋鼠是多产的，并在那里生儿育女）。</li>
-</ol>
-<p><strong>遗传算法并不保证你能获得问题的最优解，但是使用遗传算法的最大优点在于你不必去了解和操心如何去“找”最优解。（你不必去指导袋鼠向那边跳，跳多远。）而只要简单的“否定”一些表现不好的个体就行了。（把那些总是爱走下坡路的袋鼠射杀，这就是遗传算法的精粹！）</strong></p>
-<p>由此我们可以得出遗传算法的一般步骤：</p>
-<ol>
-<li>随机产生种群。</li>
-<li>根据策略判断个体的适应度，是否符合优化准则，若符合，输出最佳个体及其最优解，结束。否则，进行下一步。</li>
-<li>依据适应度选择父母，适应度高的个体被选中的概率高，适应度低的个体被淘汰。</li>
-<li>用父母的染色体按照一定的方法进行交叉，生成子代。</li>
-<li>对子代染色体进行变异。</li>
-</ol>
-<p><strong>由交叉和变异产生新一代种群，返回步骤2，直到最优解产生。</strong><br>具体图解可以回到1.3查看。</p>
-<h2 id="5-开始我们的进化（具体实现细节）"><a href="#5-开始我们的进化（具体实现细节）" class="headerlink" title="5. 开始我们的进化（具体实现细节）"></a>5. 开始我们的进化（具体实现细节）</h2><h3 id="5-1-先从编码说起"><a href="#5-1-先从编码说起" class="headerlink" title="5.1 先从编码说起"></a>5.1 先从编码说起</h3><p>编码是应用遗传算法时要解决的首要问题，也是设计遗传算法时的一个关键步骤。编码方法影响到交叉算子、变异算子等遗传算子的运算方法，大很大程度上决定了遗传进化的效率。</p>
-<p>迄今为止人们已经提出了许多种不同的编码方法。总的来说，这些编码方法可以分为三大类：二进制编码法、浮点编码法、符号编码法。下面分别进行介绍：</p>
-<h4 id="5-1-1-二进制编码法"><a href="#5-1-1-二进制编码法" class="headerlink" title="5.1.1 二进制编码法"></a>5.1.1 二进制编码法</h4><p>就像人类的基因有AGCT 4种碱基序列一样。不过在这里我们只用了0和1两种碱基,然后将他们串成一条链形成染色体。一个位能表示出2种状态的信息量，因此足够长的二进制染色体便能表示所有的特征。这便是二进制编码。如下：</p>
-<p>1110001010111</p>
-<p>它由二进制符号0和1所组成的二值符号集。它有以下一些优点：</p>
-<ol>
-<li>编码、解码操作简单易行</li>
-<li>交叉、变异等遗传操作便于实现</li>
-<li>合最小字符集编码原则</li>
-<li>利用模式定理对算法进行理论分析。</li>
-</ol>
-<p>二进制编码的缺点是：对于一些连续函数的优化问题，由于其随机性使得其局部搜索能力较差，如对于一些高精度的问题（如上题），当解迫近于最优解后，由于其变异后表现型变化很大，不连续，所以会远离最优解，达不到稳定。</p>
-<h4 id="5-1-２-浮点编码法"><a href="#5-1-２-浮点编码法" class="headerlink" title="5.1.２ 浮点编码法"></a>5.1.２ 浮点编码法</h4><p>二进制编码虽然简单直观，但明显地。但是存在着连续函数离散化时的映射误差。个体长度较短时，可能达不到精度要求，而个体编码长度较长时，虽然能提高精度，但增加了解码的难度，使遗传算法的搜索空间急剧扩大。</p>
-<p>所谓浮点法，是指个体的每个基因值用某一范围内的一个浮点数来表示。在浮点数编码方法中，必须保证基因值在给定的区间限制范围内，遗传算法中所使用的交叉、变异等遗传算子也必须保证其运算结果所产生的新个体的基因值也在这个区间限制范围内。如下所示：</p>
-<p>1.2-3.2-5.3-7.2-1.4-9.7</p>
-<p>浮点数编码方法有下面几个优点：</p>
-<ol>
-<li>适用于在遗传算法中表示范围较大的数</li>
-<li>适用于精度要求较高的遗传算法</li>
-<li>便于较大空间的遗传搜索</li>
-<li>改善了遗传算法的计算复杂性，提高了运算交率</li>
-<li>便于遗传算法与经典优化方法的混合使用</li>
-<li>便于设计针对问题的专门知识的知识型遗传算子</li>
-<li>便于处理复杂的决策变量约束条件</li>
-</ol>
-<h4 id="5-1-3-符号编码法"><a href="#5-1-3-符号编码法" class="headerlink" title="5.1.3 符号编码法"></a>5.1.3 符号编码法</h4><p>符号编码法是指个体染色体编码串中的基因值取自一个无数值含义、而只有代码含义的符号集如｛A,B,C…｝。<br>符号编码的主要优点是：</p>
-<ol>
-<li>符合有意义积术块编码原则</li>
-<li>便于在遗传算法中利用所求解问题的专门知识</li>
-<li>便于遗传算法与相关近似算法之间的混合使用。</li>
-</ol>
-<h3 id="5-2-为我们的袋鼠染色体编码"><a href="#5-2-为我们的袋鼠染色体编码" class="headerlink" title="5.2 为我们的袋鼠染色体编码"></a>5.2 为我们的袋鼠染色体编码</h3><p>在上面介绍了一系列编码方式以后，那么，如何利用上面的编码来为我们的袋鼠染色体编码呢？首先我们要明确一点：编码无非就是建立从基因型到表现型的映射关系。这里的表现型可以理解为个体特征（比如身高、体重、毛色等等）。那么，在此问题下，我们关心的个体特征就是：袋鼠的位置坐标（因为我们要把海拔低的袋鼠给杀掉）。无论袋鼠长什么样，爱吃什么。我们关心的始终是袋鼠在哪里，并且只要知道了袋鼠的位置坐标（位置坐标就是相应的染色体编码，可以通过解码得出），我们就可以：</p>
-<ol>
-<li>在喜马拉雅山脉的地图上找到相应的位置坐标，算出海拔高度。（相当于通过自变量求得适应函数的值）然后判读该不该射杀该袋鼠。</li>
-<li>可以知道染色体交叉和变异后袋鼠新的位置坐标。</li>
-</ol>
-<p>回到3.1中提的求一元函数最大值的问题。在上面我们把极大值比喻为山峰，那么，袋鼠的位置坐标可以比喻为区间[-1, 2]的某一个x坐标（有了x坐标，再通过函数表达式可以算出函数值 &lt;==&gt; 得到了袋鼠染色体编码，解码得到位置坐标，在喜马拉雅山脉地图查询位置坐标算出海拔高度）。这个x坐标是一个实数，现在，说白了就是怎么对这个x坐标进行编码。下面我们以二进制编码为例讲解，不过这种情况下以二进制编码比较复杂就是了。（如果以浮点数编码，其实就很简洁了，就一浮点数而已。）</p>
-<p>我们说过，一定长度的二进制编码序列，只能表示一定精度的浮点数。在这里假如我们要求解精确到六位小数，由于区间长度为2 - (-1) = 3 ,为了保证精度要求，至少把区间[-1,2]分为3 × 10^6等份。又因为</p>
-<blockquote>
-<p>2^21 = 2097152 &lt; 3*10^6 &lt; 2^22 = 4194304</p>
-</blockquote>
-<p>所以编码的二进制串至少需要22位。</p>
-<p><strong>把一个二进制串(b0,b1,….bn)转化为区间里面对应的实数值可以通过下面两个步骤：</strong></p>
-<ol>
-<li>将一个二进制串代表的二进制数转化为10进制数：</li>
-</ol>
-<p><img src="https://upload-images.jianshu.io/upload_images/10386940-bdafc578b24fa1c6.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/289/format/webp" alt=""></p>
-<ol start="2">
-<li>对应区间内的实数：</li>
-</ol>
-<p><img src="https://upload-images.jianshu.io/upload_images/10386940-1f0dda5c0fab787b.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/191/format/webp" alt=""><br>例如一个二进制串(1000101110110101000111)2通过上面换算以后，表示实数值0.637197。</p>
-<p>好了，上面的编码方式只是举个例子让大家更好理解而已，编码的方式千奇百怪，层出不穷，每个问题可能采用的编码方式都不一样。在这一点上大家要注意。</p>
-<h3 id="5-3-评价个体的适应度–适应度函数（fitness-function）"><a href="#5-3-评价个体的适应度–适应度函数（fitness-function）" class="headerlink" title="5.3 评价个体的适应度–适应度函数（fitness function）"></a>5.3 评价个体的适应度–适应度函数（fitness function）</h3><p>前面说了，适应度函数主要是通过个体特征从而判断个体的适应度。在本例的袋鼠跳中，我们只关心袋鼠的海拔高度，以此来判断是否该射杀该袋鼠。这样一来，该函数就非常简单了。只要输入袋鼠的位置坐标，在通过相应查找运算，返回袋鼠当前位置的海拔高度就行。<br>适应度函数也称评价函数，是根据目标函数确定的用于区分群体中个体好坏的标准。适应度函数总是非负的，而目标函数可能有正有负，故需要在目标函数与适应度函数之间进行变换。<br>评价个体适应度的一般过程为：</p>
-<ol>
-<li>对个体编码串进行解码处理后，可得到个体的表现型。</li>
-<li>由个体的表现型可计算出对应个体的目标函数值。</li>
-<li>根据最优化问题的类型，由目标函数值按一定的转换规则求出个体的适应度。</li>
-</ol>
-<h3 id="5-4-射杀一些袋鼠–选择函数（selection）"><a href="#5-4-射杀一些袋鼠–选择函数（selection）" class="headerlink" title="5.4 射杀一些袋鼠–选择函数（selection）"></a>5.4 射杀一些袋鼠–选择函数（selection）</h3><p>遗传算法中的选择操作就是用来确定如何从父代群体中按某种方法选取那些个体，以便遗传到下一代群体。选择操作用来确定重组或交叉个体，以及被选个体将产生多少个子代个体。前面说了，我们希望海拔高的袋鼠存活下来，并尽可能繁衍更多的后代。但我们都知道，在自然界中，适应度高的袋鼠越能繁衍后代，但这也是从概率上说的而已。毕竟有些适应度低的袋鼠也可能逃过我们的眼睛。</p>
-<p>那么，怎么建立这种概率关系呢？</p>
-<p><strong>下面介绍几种常用的选择算子：</strong></p>
-<ol>
-<li>轮盘赌选择（Roulette Wheel Selection）：是一种回放式随机采样方法。每个个体进入下一代的概率等于它的适应度值与整个种群中个体适应度值和的比例。选择误差较大。</li>
-<li>随机竞争选择（Stochastic Tournament）：每次按轮盘赌选择一对个体，然后让这两个个体进行竞争，适应度高的被选中，如此反复，直到选满为止。</li>
-<li>最佳保留选择：首先按轮盘赌选择方法执行遗传算法的选择操作，然后将当前群体中适应度最高的个体结构完整地复制到下一代群体中。</li>
-<li>无回放随机选择（也叫期望值选择Excepted Value Selection）：根据每个个体在下一代群体中的生存期望来进行随机选择运算。方法如下:<br>（1） 计算群体中每个个体在下一代群体中的生存期望数目N。<br>（2） 若某一个体被选中参与交叉运算，则它在下一代中的生存期望数目减去0.5，若某一个体未   被选中参与交叉运算，则它在下一代中的生存期望数目减去1.0。<br>（3） 随着选择过程的进行，若某一个体的生存期望数目小于0时，则该个体就不再有机会被选中。</li>
-<li>确定式选择：按照一种确定的方式来进行选择操作。具体操作过程如下：<br>（1） 计算群体中各个个体在下一代群体中的期望生存数目N。<br>（2） 用N的整数部分确定各个对应个体在下一代群体中的生存数目。<br>（3） 用N的小数部分对个体进行降序排列，顺序取前M个个体加入到下一代群体中。至此可完全确定出下一代群体中Ｍ个个体。</li>
-<li>无回放余数随机选择：可确保适应度比平均适应度大的一些个体能够被遗传到下一代群体中，因而选择误差比较小。</li>
-<li>均匀排序：对群体中的所有个体按期适应度大小进行排序，基于这个排序来分配各个个体被选中的概率。</li>
-<li>最佳保存策略：当前群体中适应度最高的个体不参与交叉运算和变异运算，而是用它来代替掉本代群体中经过交叉、变异等操作后所产生的适应度最低的个体。</li>
-<li>随机联赛选择：每次选取几个个体中适应度最高的一个个体遗传到下一代群体中。</li>
-<li>排挤选择：新生成的子代将代替或排挤相似的旧父代个体，提高群体的多样性。</li>
-</ol>
-<p>下面以轮盘赌选择为例给大家讲解一下：<br>假如有５条染色体，他们的适应度分别为５、８、３、７、２。<br>那么总的适应度为：F = 5 + 8 + 3 + 7 + 2 = 25。<br>那么各个个体的被选中的概率为：<br>α1 = ( 5 / 25 ) <em> 100% = 20%<br>α2 = ( 8 / 25 ) </em> 100% = 32%<br>α3 = ( 3 / 25 ) <em> 100% = 12%<br>α4 = ( 7 / 25 ) </em> 100% = 28%<br>α5 = ( 2 / 25 ) * 100% = 8%<br>所以转盘如下：<br><img src="https://upload-images.jianshu.io/upload_images/10386940-bf5ce56a414e10db.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/502/format/webp" alt=""><br>当指针在这个转盘上转动，停止下来时指向的个体就是天选之人啦。可以看出，适应性越高的个体被选中的概率就越大。</p>
-<h3 id="5-５-遗传–染色体交叉-crossover"><a href="#5-５-遗传–染色体交叉-crossover" class="headerlink" title="5.５ 遗传–染色体交叉(crossover)"></a>5.５ 遗传–染色体交叉(crossover)</h3><p>遗传算法的交叉操作，是指对两个相互配对的染色体按某种方式相互交换其部分基因，从而形成两个新的个体。</p>
-<p>适用于二进制编码个体或浮点数编码个体的交叉算子：</p>
-<ol>
-<li>单点交叉（One-point Crossover）：指在个体编码串中只随机设置一个交叉点，然后再该点相互交换两个配对个体的部分染色体。</li>
-<li>两点交叉与多点交叉：</li>
-</ol>
-<p>(1) 两点交叉（Two-point Crossover）：在个体编码串中随机设置了两个交叉点，然后再进行部分基因交换。</p>
-<p>(2) 多点交叉（Multi-point Crossover）</p>
-<ol start="3">
-<li>均匀交叉（也称一致交叉，Uniform Crossover）：两个配对个体的每个基因座上的基因都以相同的交叉概率进行交换，从而形成两个新个体。</li>
-<li>算术交叉（Arithmetic Crossover）：由两个个体的线性组合而产生出两个新的个体。该操作对象一般是由浮点数编码表示的个体。</li>
-</ol>
-<p>咳咳，根据国际惯例。还是抓一个最简单的二进制单点交叉为例来给大家讲解讲解。</p>
-<p>二进制编码的染色体交叉过程非常类似高中生物中所讲的同源染色体的联会过程――随机把其中几个位于同一位置的编码进行交换，产生新的个体。<br><img src="https://upload-images.jianshu.io/upload_images/10386940-38df5ee1440b2fbc.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/264/format/webp" alt=""><br>对应的二进制交叉：<br><img src="https://upload-images.jianshu.io/upload_images/10386940-dba7fdf2300f0e55.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/491/format/webp" alt=""></p>
-<h3 id="5-6-变异–基因突变-Mutation"><a href="#5-6-变异–基因突变-Mutation" class="headerlink" title="5.6 变异–基因突变(Mutation)"></a>5.6 变异–基因突变(Mutation)</h3><p>遗传算法中的变异运算，是指将个体染色体编码串中的某些基因座上的基因值用该基因座上的其它等位基因来替换，从而形成新的个体。<br>例如下面这串二进制编码：</p>
-<p>101101001011001</p>
-<p>经过基因突变后，可能变成以下这串新的编码：</p>
-<p>001101011011001</p>
-<p>以下变异算子适用于二进制编码和浮点数编码的个体：</p>
-<ol>
-<li>基本位变异（Simple Mutation）：对个体编码串中以变异概率、随机指定的某一位或某几位仅因座上的值做变异运算。</li>
-<li>均匀变异（Uniform Mutation）：分别用符合某一范围内均匀分布的随机数，以某一较小的概率来替换个体编码串中各个基因座上的原有基因值。（特别适用于在算法的初级运行阶段）</li>
-<li>边界变异（Boundary Mutation）：随机的取基因座上的两个对应边界基因值之一去替代原有基因值。特别适用于最优点位于或接近于可行解的边界时的一类问题。</li>
-<li>非均匀变异：对原有的基因值做一随机扰动，以扰动后的结果作为变异后的新基因值。对每个基因座都以相同的概率进行变异运算之后，相当于整个解向量在解空间中作了一次轻微的变动。</li>
-<li>高斯近似变异：进行变异操作时用符号均值为Ｐ的平均值，方差为P**2的正态分布的一个随机数来替换原有的基因值。</li>
-</ol>
-<h2 id="6-代码实现环节"><a href="#6-代码实现环节" class="headerlink" title="6. 代码实现环节"></a>6. 代码实现环节</h2><p>好了，上面我们介绍了一大截具体原理。现在就是把各个具体的零部件组装起来，动手写我们的代码了。</p>
-<pre><code>#include &lt;stdio.h&gt;
-#include &lt;math.h&gt;
-#include &lt;stdlib.h&gt;
-#include &lt;time.h&gt;
-
-#define SUM 20            //总共的染色体数量
-#define MAXloop 1200       //最大循环次数
-#define error 0.01        //若两次最优值之差小于此数则认为结果没有改变
-#define crossp 0.7        //交叉概率
-#define mp 0.04           //变异概率
-
-struct gen                //定义染色体结构
-{
-    int info;        
-    float suitability;
-};
-struct gen gen_group[SUM];//定义一个含有20个染色体的组
-struct gen gen_new[SUM];  
-
-struct gen gen_result;    //记录最优的染色体
-int result_unchange_time; //记录在error前提下最优值为改变的循环次数
-
-struct log                //形成链表，记录每次循环所产生的最优的适应度
-{
-    float suitability;
-    struct log *next;
-}llog,*head,*end;
-int log_num;              //链表长度
-
-void initiate();          
-void evaluation(int flag);
-void cross();
-void selection();
-int  record();
-void mutation();
-void showresult(int);
-
-int   randsign(float p);
-int   randbit(int i,int j);
-int   randnum();
-int   convertionD2B(float x);
-float convertionB2D(int x);
-int   createmask(int a);
-
-void main()
-{
-    int i,flag;
-    flag=0;
-    initiate();
-    evaluation( 0 );
-    for( i = 0 ; i &lt; MAXloop ; i++ )
-    {
-        cross();
-        evaluation( 1 );
-        selection();
-        if( record() == 1 )
-        {
-            flag = 1;
-            break;
-        }
-        mutation();
-    }
-    showresult( flag );
-}
-
-void initiate()
-{
-    int i , stime;    
-    long ltime;
-    ltime=time(NULL);
-    stime=(unsigned)ltime/2;
-    srand(stime);
-    for( i = 0 ; i &lt; SUM ; i++ )
-    {
-        gen_group[i].info = randnum();         
-    }
-    gen_result.suitability=1000;
-    result_unchange_time=0;
-    head=end=(struct log *)malloc(sizeof(llog));
-    if(head==NULL)
-    {
-        printf(&quot;\n内存不够！\n&quot;);
-        exit(0);
-    }
-    end-&gt;next = NULL;
-    log_num = 1;
-}
-
-void evaluation(int flag)
-{
-    int i,j;
-    struct gen *genp;
-    int gentinfo;
-    float gentsuitability;
-    float x;
-    if( flag == 0 )
-        genp = gen_group;
-    else genp = gen_new;
-    for(i = 0 ; i &lt; SUM ; i++)//计算各染色体对应的表达式值
-    {
-        x = convertionB2D( genp[i].info );
-        genp[i].suitability = x*(x*(x*(x*(x*(x-10)-26)+344)+193)-1846)-1680;
-    }
-    for(i = 0 ; i &lt; SUM - 1 ; i++)//按表达式的值进行排序，
-    {
-        for(j = i + 1 ; j &lt; SUM ; j++)
-        {
-            if( genp[i].suitability &gt; genp[j].suitability )
-            {
-                gentinfo = genp[i].info;
-                genp[i].info = genp[j].info;
-                genp[j].info = gentinfo;
-
-                gentsuitability = genp[i].suitability;
-                genp[i].suitability = genp[j].suitability;
-                genp[j].suitability = gentsuitability;        
-            }
-        }
-    }
-}
-
-void cross()
-{
-    int i , j , k ;
-    int mask1 , mask2;
-    int a[SUM];
-    for(i = 0 ; i &lt; SUM ; i++)  a[i] = 0;
-    k = 0;
-    for(i = 0 ; i &lt; SUM ; i++)
-    {
-        if( a[i] == 0)
-        {
-            for( ; ; )//随机找到一组未进行过交叉的染色体与a[i]交叉
-            {
-                   j = randbit(i + 1 , SUM - 1);
-                if( a[j] == 0)    break;
-            }
-            if(randsign(crossp) == 1)
-            {
-                mask1 = createmask(randbit(0 , 14));
-                mask2 = ~mask1;
-                gen_new[k].info = (gen_group[i].info) &amp; mask1 + (gen_group[j].info) &amp; mask2;
-                gen_new[k+1].info=(gen_group[i].info) &amp; mask2 + (gen_group[j].info) &amp; mask1;
-                k = k + 2;
-            }
-            else 
-            {
-                gen_new[k].info=gen_group[i].info;
-                gen_new[k+1].info=gen_group[j].info;
-                k=k+2;
-            }
-            a[i] = a[j] = 1;
-        }
-    }
-}
-
-void selection()
-{
-    int i , j , k;
-    j = 0;
-    i = SUM/2-1;
-    if(gen_group[i].suitability &lt; gen_new[i].suitability)
-    {
-        for(j = 1 ; j &lt; SUM / 2 ; j++)
-        {
-            if(gen_group[i+j].suitability &gt; gen_new[i-j].suitability)
-                break;
-        }
-    }
-    else
-        if(gen_group[i].suitability&gt;gen_new[i].suitability)
-        {
-            for(j=-1;j&gt;-SUM/2;j--)
-            {
-                if(gen_group[i+j].suitability&lt;=gen_new[i-j].suitability)
-                    break;
-            }
-        }
-    for(k=j;k&lt;SUM/2+1;k++)
-    {
-        gen_group[i+k].info = gen_new[i-k].info;
-        gen_group[i+k].suitability = gen_new[i-k].suitability;
-    }    
-}
-
-int record()
-{
-    float x;    
-    struct log *r;
-    r=(struct log *)malloc(sizeof(llog));
-    if(r==NULL)
-    {
-        printf(&quot;\n内存不够！\n&quot;);
-        exit(0);
-    }
-    r-&gt;next = NULL;
-    end-&gt;suitability = gen_group[0].suitability;
-    end-&gt;next = r;
-    end = r;
-    log_num++;
-
-    x = gen_result.suitability - gen_group[0].suitability;
-    if(x &lt; 0)x = -x;
-    if(x &lt; error)
-    {
-        result_unchange_time++;
-        if(result_unchange_time &gt;= 20)return 1;
-    }
-    else
-    {
-        gen_result.info = gen_group[0].info;
-        gen_result.suitability = gen_group[0].suitability;
-        result_unchange_time=0;
-    }
-    return 0;
-}
-
-void mutation()
-{
-    int i , j , m;
-    float x;
-    float gmp;
-    int gentinfo;
-    float gentsuitability;
-    gmp = 1 - pow(1 - mp , 11);//在基因变异概率为mp时整条染色体的变异概率
-    for(i = 0 ; i &lt; SUM ; i++)
-    {
-        if(randsign(gmp) == 1)
-        {
-            j = randbit(0 , 14);
-            m = 1 &lt;&lt; j;
-            gen_group[i].info = gen_group[i].info^m;
-            x = convertionB2D(gen_group[i].info);
-            gen_group[i].suitability = x*(x*(x*(x*(x*(x-10)-26)+344)+193)-1846)-1680;
-        }
-    }
-    for(i = 0 ; i &lt; SUM - 1 ; i++)
-    {
-        for(j = i + 1 ; j &lt; SUM ; j++)
-        {
-            if(gen_group[i].suitability &gt; gen_group[j].suitability)
-            {
-                gentinfo = gen_group[i].info;
-                gen_group[i].info = gen_group[j].info;
-                gen_group[j].info = gentinfo;
-
-                gentsuitability = gen_group[i].suitability;
-                gen_group[i].suitability = gen_group[j].suitability;
-                gen_group[j].suitability = gentsuitability;
-            }
-        }
-    }
-}
-
-void showresult(int flag)//显示搜索结果并释放内存
-{
-    int i , j;
-    struct log *logprint,*logfree;
-    FILE *logf;
-    if(flag == 0)
-        printf(&quot;已到最大搜索次数，搜索失败！&quot;);
-    else 
-    {
-        printf(&quot;当取值%f时表达式达到最小值为%f\n&quot;,convertionB2D(gen_result.info),gen_result.suitability);
-        printf(&quot;收敛过程记录于文件log.txt&quot;);
-        if((logf = fopen(&quot;log.txt&quot; , &quot;w+&quot;)) == NULL)
-        {
-            printf(&quot;Cannot create/open file&quot;);
-            exit(1);
-        }
-        logprint=head;
-        for(i = 0 ; i &lt; log_num ; i = i + 5)//对收敛过程进行显示
-        {
-            for(j = 0 ; (j &lt; 5) &amp; ((i + j) &lt; log_num-1) ; j++)
-            {
-                fprintf(logf , &quot;%20f&quot; , logprint-&gt;suitability);
-                logprint=logprint-&gt;next;                
-            }
-            fprintf(logf,&quot;\n\n&quot;);
-        }
-    }
-    for(i = 0 ; i&lt; log_num ; i++)//释放内存
-    {
-        logfree=head;
-        head=head-&gt;next;
-        free(logfree);
-        fclose(logf);
-    }
-    getchar();
-}
-
-int randsign(float p)//按概率p返回1
-{
-    if(rand() &gt; (p * 32768))
-        return 0;
-    else return 1;
-}
-int randbit(int i, int j)//产生在i与j之间的一个随机数
-{
-    int a , l;
-    l = j - i + 1;
-    a = i + rand() * l / 32768;
-    return a;
-}
-int randnum()
-{
-    int x;
-    x = rand() / 2;
-    return x;
-}
-float convertionB2D(int x)
-{
-    float y;
-    y = x;
-    y = (y - 8192) / 1000;
-    return y;
-
-}
-int convertionD2B(float x)
-{
-    int g;
-    g = (x * 1000) + 8192;
-    return g;
-}
-int createmask(int a)
-{
-    int mask;
-    mask=(1 &lt;&lt; (a + 1)) - 1;
-    return mask;
-}
-</code></pre>
-          
+<h2 id="什么是遗传算法"><a href="#什么是遗传算法" class="headerlink" title="什么是遗传算法"></a>什么是遗传算法</h2><h3 id="遗传算法的科学定义"><a href="#遗传算法的科学定义" class="headerlink" title="遗传算法的科学定义"></a>遗传算法的科学定义</h3><p>遗传算法（Genetic Algorithm, GA）是模拟达尔文生物进化论的自然选择和遗传学机理的生物进化过程的计算模型，是一种通过模拟自然进化过程搜索最优解的方法。</p>
+<p>其主要特点是直接对结构对象进行操作，不存在求导和函数连续性的限定；具有内在的隐并行性和更好的全局寻优能力；采用概率化的寻优方法，不需要确定的规则就能自动获取和指导优化的搜索空间，自适应地调整搜索方向。<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/01/25/secondlog/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
-    </div>
+    </p></div>
     
     
     
@@ -943,14 +458,18 @@ int createmask(int a)
 
       
         
-          
-            <p>发布出这个博客，查资料加上尝试总共用了两天。之前一直想写个博客，因为我听说坚持写技术博客的最后很多都成了大牛。然而因为我的懒惰和拖延，我拖到了现在才弄出了这么一个超级简陋的博客。额(⊙﹏⊙)，希望我能坚持下去吧。</p>
-<h4 id="下面附上我做出这个博客都查阅了哪些网站"><a href="#下面附上我做出这个博客都查阅了哪些网站" class="headerlink" title="下面附上我做出这个博客都查阅了哪些网站"></a>下面附上我做出这个博客都查阅了哪些网站</h4><p><a href="https://www.cnblogs.com/cherishzy/p/5694658.html" target="_blank" rel="noopener">在Github上面搭建Hexo博客（一）：部署到Github</a><br><a href="https://www.jianshu.com/p/1c888a6b8297?utm_source=oschina-app" target="_blank" rel="noopener">hexo——轻量、简易、高逼格的博客</a><br><a href="https://hexo.io/docs/" target="_blank" rel="noopener">Hexo文档</a><br><a href="https://www.jianshu.com/p/191d1e21f7ed" target="_blank" rel="noopener">Markdown基本语法</a><br><a href="https://blog.csdn.net/time888/article/details/70249241" target="_blank" rel="noopener">hexo 怎么删除文章</a><br><a href="https://www.jianshu.com/p/3a05351a37dc" target="_blank" rel="noopener">Hexo的Next主题详细配置</a></p>
-
-          
+          <p>发布出这个博客，查资料加上尝试总共用了两天。之前一直想写个博客，因为我听说坚持写技术博客的最后很多都成了大牛。然而因为我的懒惰和拖延，我拖到了现在才弄出了这么一个超级简陋的博客。额(⊙﹏⊙)，希望我能坚持下去吧。</p>
+<h4 id="下面附上我做出这个博客都查阅了哪些网站"><a href="#下面附上我做出这个博客都查阅了哪些网站" class="headerlink" title="下面附上我做出这个博客都查阅了哪些网站"></a>下面附上我做出这个博客都查阅了哪些网站</h4><p><a href="https://www.cnblogs.com/cherishzy/p/5694658.html" target="_blank" rel="noopener">在Github上面搭建Hexo博客（一）：部署到Github</a><br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/01/24/firstblog/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
-    </div>
+    </p></div>
     
     
     
@@ -1095,7 +614,7 @@ int createmask(int a)
 <div class="theme-info">
   Theme -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Mist
+    NexT.Gemini
   </a>
 </div>
 
@@ -1174,6 +693,13 @@ int createmask(int a)
 
   
   
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
 
   
     <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
